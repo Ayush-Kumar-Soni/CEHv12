@@ -153,7 +153,7 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 
 1. In C:\ drive, create a New Folder, and name it magic.
 2. Navigate to the location C:\Windows\System32, copy calc.exe, and paste it to the C:\magic location
-3. Go to C:\magic >> click on file navigation bar >> type cmd  |OR|  open cmd and type cd C:\magic
+3. Go to C:\magic >> click on file navigation bar >> type cmd  |OR|  open cmd and type "cd C:\magic"
 4. Now type in cmd,
   >>> notepad readme.txt  >>  yes(Notepad pop-up appears)  >> type something in notepad  >> save(ctrl+s)  >> close notepad
   >>> dir 
@@ -165,9 +165,23 @@ For demonstration purposes, we are using the same machine to execute and hide fi
 
 =============================================================================================================================================================================================================================================================================================================================================================================================================
 
-# Hide Data using White Space Steganography (Tool : SNOW.exe)
+# Hide Data using White Space Steganography (Tool : SNOW.EXE)
+--------------------------------------------------------------
+1. create a folder(snow) on desktop and open it  >>  copy and paste the snow.exe in snow folder >> 
+2. In snow folder click on navigation bar and type "cmd" and press enter  |OR|  open cmd and type "cd C:\users\Admin\Desktop\Snow"  |OR|  open snow folder, right click on blank place and select option "open in terminal".
+3. In cmd type "notepad"  >>  notepad will open  >> type something (Hello world!)  >> save file (input.txt) >> close notepad
+4. In cmd type (snow -C -m "My swiss bank account number is 45656684512263" -p "magic" input.txt output.txt)
+     > -C Compress the data if concealing, or uncompress it while extracting.
+     > -p For setting the password for concealment of data and while extracting the data.
+     > -m Message String The content written in this flag will be concealed into the input file.
+     > output.txt : file that will automatically be created in the same location with the secret message.
+5. To check the file in the GUI, open the output.txt in Notepad, and go to Edit --> Select All. You will see the hidden data inside output.txt in the form of spaces and tabs.
+6. In cmd type (snow -C -p "magic" output.txt) to show the hidden txt.
 
+=========================================================================================================================================================================================================================================================================================================================================================================================================================
 
+# Image Steganography using OpenStego and StegOnline
+------------------------------------------------------
 
 
 
