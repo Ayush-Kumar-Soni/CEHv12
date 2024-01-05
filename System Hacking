@@ -1,4 +1,5 @@
-# Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS -> Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+** Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS  [Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.] **
 >>> UBUNTU MACHINE [TARGET]
 1. sudo apt install nfs-kernel-server
 2. sudo nano /etc/exports   >>  /home *(rw,no_root_squash) >>  CTRL+S(save) >> CTRL+X(exit) 
@@ -23,3 +24,4 @@
 20. find / -name "*.txt" -ls 2> /dev/null    (view all the .txt files on the system)
 21. route -n          (view the host/network names in numeric form)
 22. find / -perm -4000 -ls 2> /dev/null          (view the SUID executable binaries)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
