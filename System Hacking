@@ -139,14 +139,17 @@ nc -nc 10.10.1.11 9999 (connect vulnserver.exe to parrot machine netcat listner)
       >> wmic /node:"" product get name,version,vendor      ( view the details of installed software)
       >> wmic cpu get     ( to retrieve the processor’s details)
       >> wmic useraccount get name,sid    (to retrieve login names and SIDs of the users)
-      >> net start or stop       (Starts/stops a network service)
-      >> netsh advfirewall set currentprofile state off       (Turn off firewall service for current profile)
-      >> netsh advfirewall set allprofiles state off        (Turn off firewall service for all profiles)
-   d. Post Escalating PRIVILEGES
-      >> findstr /E ".txt" > txt.txt        (Retrieves all the text files (needs privileged access))
-      >> findstr /E ".log" > log.txt      (Retrieves all the log files (needs privileged access))
-      >> findstr /E ".doc" > doc.txt      (Retrieves all the document files (needs privileged access))
-   e. wmic os where Primary='TRUE' reboot     (to reboot the target system)
+   d. wmic os where Primary='TRUE' reboot     (to reboot the target system)
+
+26. Post exploitation : 
+   >> net start or stop       (Starts/stops a network service)
+   >> netsh advfirewall set currentprofile state off       (Turn off firewall service for current profile)
+   >> netsh advfirewall set allprofiles state off        (Turn off firewall service for all profiles)
+27. Post Escalating PRIVILEGES : 
+   >> findstr /E ".txt" > txt.txt        (Retrieves all the text files (needs privileged access))
+   >> findstr /E ".log" > log.txt      (Retrieves all the log files (needs privileged access))
+   >> findstr /E ".doc" > doc.txt      (Retrieves all the document files (needs privileged access))
+   
 
 =======================================================================================================================================================================================================================================================================================================================================================================================================================================
 
