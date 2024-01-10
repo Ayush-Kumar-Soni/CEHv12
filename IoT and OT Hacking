@@ -29,3 +29,18 @@ The information regarding the target IoT and OT devices can be acquired using va
 Using Shodan, you can obtain the details of SCADA systems that are used in water treatment plants, nuclear power plants, HVAC systems, electrical transmission systems, home heating systems, etc
 
 ===============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+
+Capture and Analyze IoT Traffic using Wireshark : 
+------------------------------------------------
+
+MQTT(tcp/1883) is a lightweight messaging protocol that uses a publish/subscribe communication pattern. Since the protocol is meant for devices with a low-bandwidth, it is considered ideal for machine-to-machine (M2M) communication or IoT applications
+
+-> [windows server 2019 / 10.10.1.19]
+	>>> MQTT Broker web interface(Bevywise_MQTTRoute_Win_64) : communicate iot devices through this server
+	>>> chrome -> localhost:8080 send msg(ho gya grm)
+
+-> [windows server 2022 /10.10.1.22] 
+	>>> Bevywise IoT simulator(Bevywise_IoTSimulator_Win_64.exe ) : virtule iot device - client side(create virtule iot network and virtule iot device)
+	>>> wireshark(mqtt)
+
+ 
